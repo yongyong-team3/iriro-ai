@@ -1,0 +1,33 @@
+{
+  "threshold_m": 1.5,
+  "hold_below_hours": 2,
+  "station": "용인시(월촌교) 1016607",
+  "prediction_type": "WATER_STAGE_ONLY",
+  "trail_walkable": null,
+  "recovery_24h_confident": false,
+  "input_features": [
+    "water_level_m",
+    "reference_m",
+    "above_ref_m",
+    "change_1h_m",
+    "change_3h_m",
+    "change_6h_m",
+    "change_12h_m",
+    "change_24h_m",
+    "rain_past_1h_mm",
+    "rain_past_3h_mm",
+    "rain_past_6h_mm",
+    "rain_past_12h_mm",
+    "drop_from_peak_6h_m"
+  ],
+  "sampling_interval_minutes": 10,
+  "min_history_hours": 24,
+  "observation_source": "월촌교 수위 + 모현면사무소 강수량",
+  "model_files": [
+    "recovery_6h_xgb.json",
+    "recovery_12h_xgb.json",
+    "recovery_24h_logistic_experimental.json",
+    "conditional_eta_xgb.json"
+  ],
+  "important": "1.5m는 검증 안 된 임시 참고 수위; 공식 통제·산책로 이용 여부는 별도 확인"
+}

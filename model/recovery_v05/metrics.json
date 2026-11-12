@@ -1,0 +1,150 @@
+{
+  "model_version": "v0.5",
+  "reference_m": 1.5,
+  "stable_hours": 2,
+  "prediction_target": "월촌교 관측 수위가 1.5m 이하로 내려가 2시간 연속 유지할 최초 도달 시점",
+  "trail_inundation_verified": false,
+  "official_trail_open_verified": false,
+  "test_period": "2026 (최종 시험; 이전 실험에서 이미 분석한 해이므로 완전한 신규 독립 검증 아님)",
+  "input_variables": [
+    "water_level_m",
+    "reference_m",
+    "above_ref_m",
+    "change_1h_m",
+    "change_3h_m",
+    "change_6h_m",
+    "change_12h_m",
+    "change_24h_m",
+    "rain_past_1h_mm",
+    "rain_past_3h_mm",
+    "rain_past_6h_mm",
+    "rain_past_12h_mm",
+    "drop_from_peak_6h_m"
+  ],
+  "historical_forecast_issuance_delay_min_assumed": 30,
+  "train_core_rows": 208,
+  "validation_rows": 81,
+  "train_final_rows": 289,
+  "test_rows": 52,
+  "test_approx_episode_count": 7,
+  "by_year": {
+    "2023": {
+      "rows": 123,
+      "approx_episodes": 11,
+      "recovered_6h": 67,
+      "recovered_12h": 87,
+      "recovered_24h": 99
+    },
+    "2024": {
+      "rows": 85,
+      "approx_episodes": 11,
+      "recovered_6h": 55,
+      "recovered_12h": 68,
+      "recovered_24h": 81
+    },
+    "2025": {
+      "rows": 81,
+      "approx_episodes": 7,
+      "recovered_6h": 43,
+      "recovered_12h": 65,
+      "recovered_24h": 81
+    },
+    "2026": {
+      "rows": 52,
+      "approx_episodes": 7,
+      "recovered_6h": 36,
+      "recovered_12h": 46,
+      "recovered_24h": 52
+    }
+  },
+  "validation_comparison": [
+    {
+      "horizon_h": 6,
+      "features": "observations",
+      "val_brier": 0.22049501538276672,
+      "val_auc": 0.7567319461444308
+    },
+    {
+      "horizon_h": 6,
+      "features": "plus_historical_forecast",
+      "val_brier": 0.22057047486305237,
+      "val_auc": 0.7619339045287638
+    },
+    {
+      "horizon_h": 12,
+      "features": "observations",
+      "val_brier": 0.12104454636573792,
+      "val_auc": 0.8471153846153846
+    },
+    {
+      "horizon_h": 12,
+      "features": "plus_historical_forecast",
+      "val_brier": 0.12603819370269775,
+      "val_auc": 0.8485576923076923
+    }
+  ],
+  "forecast_feature_selection": "예보 추가의 검증 Brier 개선 폭이 0.005 미만이면 관측만 사용하는 경량 모델 채택. 6h와 12h 모두 관측 전용 선택.",
+  "recovery_6h": {
+    "n": 52,
+    "positive": 36,
+    "negative": 16,
+    "auc": 0.8394097222222222,
+    "brier": 0.1645696071659143,
+    "constant_train_rate_brier": 0.22774926250698807,
+    "event_block_bootstrap": {
+      "episode_count": 7,
+      "auc_95pct_exploratory_interval": [
+        0.6541,
+        0.9869
+      ],
+      "brier_95pct_exploratory_interval": [
+        0.1089,
+        0.2142
+      ]
+    },
+    "status": "PILOT_ONLY"
+  },
+  "recovery_12h": {
+    "n": 52,
+    "positive": 46,
+    "negative": 6,
+    "auc": 0.8297101449275363,
+    "brier": 0.09811275664836096,
+    "constant_train_rate_brier": 0.11729109123177682,
+    "event_block_bootstrap": {
+      "episode_count": 7,
+      "auc_95pct_exploratory_interval": [
+        0.7376,
+        0.9394
+      ],
+      "brier_95pct_exploratory_interval": [
+        0.0289,
+        0.1212
+      ]
+    },
+    "status": "PILOT_ONLY"
+  },
+  "recovery_24h": {
+    "n": 52,
+    "positive": 52,
+    "negative": 0,
+    "auc": null,
+    "brier": 0.008193763002834354,
+    "constant_train_rate_brier": 0.009386860789502051,
+    "event_block_bootstrap": {
+      "episode_count": 7,
+      "auc_95pct_exploratory_interval": null,
+      "brier_95pct_exploratory_interval": [
+        0.0003,
+        0.0119
+      ]
+    },
+    "status": "NOT_DISCRIMINATION_VALIDATED_ALL_2026_POSITIVE"
+  },
+  "eta_conditional_24h": {
+    "eval_n": 52,
+    "mae_hours": 2.5099999465239358,
+    "constant_train_median_mae_hours": 3.5641025641025643,
+    "warning": "실제 24시간 안에 회복한 관측 시점에만 측정한 조건부 오차. 전체 실전 ETA 정확도가 아님."
+  }
+}

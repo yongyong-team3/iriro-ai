@@ -1,0 +1,10 @@
+fastapi>=0.110
+uvicorn>=0.29
+pydantic>=2.6
+xgboost>=2.1
+scikit-learn>=1.4
+pandas>=2.2
+numpy>=1.26
+# 테스트용
+pytest>=8.0
+httpx>=0.27

@@ -1,0 +1,20 @@
+{
+ "features": [
+  "water_level_m",
+  "water_lag_10min_m",
+  "water_lag_30min_m",
+  "water_lag_60min_m",
+  "water_lag_120min_m",
+  "water_change_60min_m",
+  "water_change_10min_m",
+  "rain_10min_mm",
+  "rain_sum_30min_mm",
+  "rain_sum_60min_mm",
+  "rain_sum_180min_mm"
+ ],
+ "target": "delta = 1시간 뒤 수위 - 현재 수위",
+ "predict": "round(현재 수위 + 모델 출력, 2) = 1시간 뒤 수위(m)",
+ "interval": "10분",
+ "version": "v2 (+water_change_10min_m)",
+ "station": "월촌교 수위 + 용인시(모현면사무소) 강수량 10164050"
+}
