@@ -15,6 +15,7 @@ import threading
 import urllib.parse
 import urllib.request
 from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
 
 import numpy as np
 import pandas as pd
@@ -26,6 +27,12 @@ PAGE_SIZE = 1000  # 플랫폼이 허용하는 최대 응답 행 수
 MAX_RAIN_PAGES = 12  # 호출 한도 보호: 현재 우량 API는 최근 자료가 지연되고 있음
 WATER_URL = "https://www.safetydata.go.kr/V2/api/DSSP-IF-00007"
 RAIN_URL = "https://www.safetydata.go.kr/V2/api/DSSP-IF-00006"
+KOREA = ZoneInfo("Asia/Seoul")
+
+
+def _kst_now() -> datetime:
+    """플랫폼 관측 시각(YMD_HM)과 같은 한국 시각을 naive datetime으로 반환한다."""
+    return datetime.now(KOREA).replace(tzinfo=None)
 
 
 class SafetyDataSource:
@@ -142,7 +149,7 @@ class SafetyDataSource:
         return f"{type(exc).__name__}" + (f" HTTP {status}" if status is not None else "")
 
     def refresh(self) -> None:
-        end = _floor10(datetime.now())
+        end = _floor10(_kst_now())
         start = end - timedelta(hours=KEEP_HOURS + 2)
         errors = []
         water, rain = {}, {}
@@ -171,7 +178,7 @@ class SafetyDataSource:
             r_index = self.cache.rain_10min_mm.last_valid_index() if not self.cache.empty else None
             self.last_water_at = w_index.to_pydatetime() if w_index is not None else None
             self.last_rain_at = r_index.to_pydatetime() if r_index is not None else None
-        self.last_refresh = datetime.now()
+        self.last_refresh = _kst_now()
         self.last_error = "; ".join(errors) or None
         logger.info("SafetyData 수집 | 수위=%d건 최신=%s | 우량=%d건 최신=%s%s",
                     len(water), self.last_water_at, len(rain), self.last_rain_at,
@@ -179,7 +186,7 @@ class SafetyDataSource:
 
     def now(self) -> datetime:
         with self.lock:
-            return self.last_water_at or _floor10(datetime.now())
+            return self.last_water_at or _floor10(_kst_now())
 
     def range(self):
         with self.lock:

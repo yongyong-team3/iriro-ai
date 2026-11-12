@@ -9,6 +9,7 @@ import os
 import logging
 from contextlib import asynccontextmanager
 from datetime import datetime
+from zoneinfo import ZoneInfo
 from pathlib import Path
 from typing import Literal
 
@@ -127,7 +128,8 @@ def health():
     status = "ok"
     if source.name == "safetydata":
         latest = getattr(source, "last_water_at", None)
-        status = "ok" if latest and (datetime.now() - latest).total_seconds() <= 1800 else "degraded"
+        korea_now = datetime.now(ZoneInfo("Asia/Seoul")).replace(tzinfo=None)
+        status = "ok" if latest and (korea_now - latest).total_seconds() <= 1800 else "degraded"
     info = {"status": status, "model_version": predictor.model_version, "features": predictor.features,
             "recovery_model": "recovery-v0.5", "data_source": source.name, "data_now": source.now().strftime("%Y-%m-%dT%H:%M")}
     if source.name == "safetydata":
